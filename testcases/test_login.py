@@ -1,5 +1,5 @@
 import time
-
+import pytest
 from pages.login_page import LoginPage
 
 login_page_url = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"
@@ -21,6 +21,7 @@ def test_can_login_logout(chrome_driver):
     login_page.page_scroll()
 
     # Log out test
+    # verify successful logout clicking logout link from user profile dropdown menu
     login_page.click_user_profile_icon()
     select_menu_logout = login_page.select_user_profile_dropdown_menu("Logout")
     logout_success = login_page.check_url(login_page_url)
@@ -29,37 +30,17 @@ def test_can_login_logout(chrome_driver):
     assert login_success and logout_success and select_menu_logout
 
 
-def test_no_username_inputs_login(chrome_driver):
+@pytest.mark.parametrize("test_label_, username_, password_, no_of_validation_msg_, validation_msg_", [("no username", "", "admin123", 1, "Required"), ("no password", "Admin", "", 1, "Required"), ("no inputs", "", "", 2, "Required")])
+def test_no_input_login_validation(chrome_driver, test_label_, username_, password_, no_of_validation_msg_, validation_msg_):
     login_page = LoginPage(chrome_driver)
     login_page.open_page(login_page_url)
-    login_page.enter_username("")
-    login_page.enter_password("admin123")
+    login_page.enter_username(username_)
+    login_page.enter_password(password_)
     login_page.click_login()
-    validation_errors = login_page.wait_find_tag_elements_xpath_by_text('span', 'Required')
+    validation_errors = login_page.wait_find_tag_elements_xpath_by_text('span', validation_msg_)
     time.sleep(2)
-    assert login_page.get_current_url() == login_page_url and len(validation_errors) == 1
-
-
-def test_no_password_inputs_login(chrome_driver):
-    login_page = LoginPage(chrome_driver)
-    login_page.open_page(login_page_url)
-    login_page.enter_username("Admin")
-    login_page.enter_password("")
-    login_page.click_login()
-    validation_errors = login_page.wait_find_tag_elements_xpath_by_text('span', 'Required')
-    time.sleep(2)
-    assert login_page.get_current_url() == login_page_url and len(validation_errors) == 1
-
-
-def test_no_inputs_login(chrome_driver):
-    login_page = LoginPage(chrome_driver)
-    login_page.open_page(login_page_url)
-    login_page.enter_username("")
-    login_page.enter_password("")
-    login_page.click_login()
-    validation_errors = login_page.wait_find_tag_elements_xpath_by_text('span', 'Required')
-    time.sleep(2)
-    assert login_page.get_current_url() == login_page_url and len(validation_errors) == 2
+    # print(test_label_)
+    assert login_page.get_current_url() == login_page_url and len(validation_errors) == no_of_validation_msg_
 
 
 def test_invalid_credential_login(chrome_driver):
@@ -72,7 +53,3 @@ def test_invalid_credential_login(chrome_driver):
     validation_error = login_page.find_error_invalid_credentials()
     time.sleep(2)
     assert login_page.get_current_url() == login_page_url and validation_error
-
-
-
-
