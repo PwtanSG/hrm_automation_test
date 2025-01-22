@@ -54,8 +54,8 @@ class BaseDriver:
         wait = WebDriverWait(self.driver, self.TIMEOUT_CONST)
         elements = []
         try:
-            elements = wait.until(EC.presence_of_all_elements_located(self.user_profile_dropdown_menu))
-            # print(len(menu_elements))
+            elements = wait.until(EC.presence_of_all_elements_located(locator_))
+            # print(len(elements))
         except TimeoutException:
             print('Timeout : ' + sys._getframe().f_code.co_name + ' Line:' + str(sys._getframe().f_lineno))
         return elements
