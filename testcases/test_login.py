@@ -4,7 +4,9 @@ from pages.login_page import LoginPage
 
 login_page_url = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"
 auth_page_url = "https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index"
-reset_password_page = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/requestPasswordResetCode"
+reset_password_page_url = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/requestPasswordResetCode"
+co_website_url = "https://www.orangehrm.com/"
+co_website_title = "Human Resources Management Software | OrangeHRM"
 # https://opensource-demo.orangehrmlive.com/web/index.php/auth/sendPasswordReset
 
 
@@ -32,8 +34,11 @@ def test_can_login_logout(chrome_driver):
     assert login_success and logout_success and select_menu_logout
 
 
-@pytest.mark.parametrize("test_label_, username_, password_, no_of_validation_msg_, validation_msg_", [("no username", "", "admin123", 1, "Required"), ("no password", "Admin", "", 1, "Required"), ("no inputs", "", "", 2, "Required")])
-def test_no_input_login_validation(chrome_driver, test_label_, username_, password_, no_of_validation_msg_, validation_msg_):
+@pytest.mark.parametrize("test_label_, username_, password_, no_of_validation_msg_, validation_msg_",
+                         [("no username", "", "admin123", 1, "Required"), ("no password", "Admin", "", 1, "Required"),
+                          ("no inputs", "", "", 2, "Required")])
+def test_no_input_login_validation(chrome_driver, test_label_, username_, password_, no_of_validation_msg_,
+                                   validation_msg_):
     login_page = LoginPage(chrome_driver)
     # go to login page
     login_page.open_page(login_page_url)
@@ -63,3 +68,25 @@ def test_invalid_credential_login(chrome_driver):
     time.sleep(2)
     # check login is unsuccessful abd page remain in login page
     assert login_page.get_current_url() == login_page_url and validation_error
+
+
+def test_co_website_link(chrome_driver):
+    login_page = LoginPage(chrome_driver)
+    # navigate to login page
+    login_page.open_page(login_page_url)
+    # find company website link and click
+    link_element = login_page.get_co_website_link()
+    link_element.click()
+    # switch to the child page
+    time.sleep(2)
+    login_page.switch_to_child_browser_window()
+    time.sleep(2)
+    co_website_success = login_page.check_url(co_website_url)
+    title_check = login_page.wait_for_title_is(co_website_title)
+    assert co_website_success and title_check
+
+
+# def test_hyperlinks(chrome_driver):
+#     login_page = LoginPage(chrome_driver)
+#     login_page.open_page(login_page_url)
+#     login_page.get_hyperlinks()

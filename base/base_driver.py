@@ -7,7 +7,6 @@ import sys
 
 
 class BaseDriver:
-
     TIMEOUT_CONST = 10
 
     def __int__(self, driver):
@@ -91,3 +90,12 @@ class BaseDriver:
         except TimeoutException:
             print('Timeout : ' + sys._getframe().f_code.co_name + ' Line:' + str(sys._getframe().f_lineno))
             return ''
+
+    def wait_for_title_is(self, title_):
+        wait = WebDriverWait(self.driver, self.TIMEOUT_CONST)
+        result = False
+        try:
+            result = wait.until(EC.title_is(title_))
+        except TimeoutException:
+            print('Timeout : ' + sys._getframe().f_code.co_name + ' Line:' + str(sys._getframe().f_lineno))
+        return result

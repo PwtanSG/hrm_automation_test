@@ -23,6 +23,9 @@ class LoginPage(BaseDriver):
         self.user_profile_icon = (By.CLASS_NAME, "oxd-userdropdown-name")
         # self.user_profile_icon = (By.XPATH, "//p[@class='oxd-userdropdown-name']")
         self.user_profile_dropdown_menu = (By.XPATH, "//a[@class='oxd-userdropdown-link']")
+        self.co_website_link = (By.LINK_TEXT, "OrangeHRM, Inc")
+        self.hyperlinks = (By.TAG_NAME, "a")
+        # self.hyperlinks = (By.XPATH, "//a[@text='OrangeHRM, Inc']")
 
     def keyboard_press(self, keyname):
         actions = ActionChains(self.driver)
@@ -82,13 +85,13 @@ class LoginPage(BaseDriver):
     def find_error_invalid_credentials(self):
         error_msg_element = BaseDriver.wait_for_presence_of_element_located(self, self.error_invalid_credential)
         return True if error_msg_element else False
-        # wait = WebDriverWait(self.driver, self.TIMEOUT_CONST)
-        # try:
-        #     wait.until(EC.presence_of_element_located(self.error_invalid_credential))
-        #     return True
-        # except TimeoutException:
-        #     print('Timeout : ' + sys._getframe().f_code.co_name + ' Line:' + str(sys._getframe().f_lineno))
-        #     return False
+
+    def get_co_website_link(self):
+        return BaseDriver.wait_for_presence_of_element_located(self, self.co_website_link)
+
+    def get_hyperlinks(self):
+        links = BaseDriver.wait_for_presence_of_elements_located(self, self.hyperlinks)
+        # links = self.driver.find_elements(By.XPATH, '//a')
 
     def find_element(self):
         try:
@@ -97,6 +100,21 @@ class LoginPage(BaseDriver):
         except NoSuchElementException:
             print('NoSuchElementException')
             return False
+
+    def switch_to_child_browser_window(self):
+        # get current window handle
+        parent_window = self.driver.current_window_handle
+
+        # get first child window
+        wd = self.driver.window_handles
+
+        for w in wd:
+            # switch focus to child window
+            if w != parent_window:
+                self.driver.switch_to.window(w)
+                break
+        time.sleep(1)
+        # print("Child window title: " + self.driver.title)
 
     # def take_screenshot(self):
     #     file_dir = path.join(os.getcwd(), "reports")

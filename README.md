@@ -17,8 +17,13 @@ Validate that validation error message(s) prompted
 Test user unable to login successfully with invalid credential  \
 Validate error message
 
+### test_co_website_link
+Test company website hyperlink 
+Verify that browser open a tab that shows company website 
+
 ## script usage
 pytest -v testcases/test_login.py
+pytest -v -s -k test_invalid_credential_login
 
 ## Demo video
 [https://www.youtube.com/watch?v=XtnMgxRbjAc]
