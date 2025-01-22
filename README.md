@@ -7,17 +7,11 @@ Web functional automation test using Selenium WebDriver with Python
 Test user can login successfully with valid credential  \
 Test user can logout successfully from avatar dropdown logout 
 
-### test_no_username_input_login 
+### test_no_input_login_validation 
 Test user unable to login successfully without username  \
-Validate validation message
-
-### test_no_password_input_login
 Test user unable to login successfully without password  \
-Validate validation message
-
-### test_no_inputs_login
 Test user unable to login successfully without username and password  \
-Validate validation message
+Validate that validation error message(s) prompted
 
 ### test_invalid_credential_login
 Test user unable to login successfully with invalid credential  \

@@ -4,6 +4,8 @@ from pages.login_page import LoginPage
 
 login_page_url = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"
 auth_page_url = "https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index"
+reset_password_page = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/requestPasswordResetCode"
+# https://opensource-demo.orangehrmlive.com/web/index.php/auth/sendPasswordReset
 
 
 def test_can_login_logout(chrome_driver):
@@ -40,14 +42,15 @@ def test_no_input_login_validation(chrome_driver, test_label_, username_, passwo
     login_page.enter_password(password_)
     # click login
     login_page.click_login()
+    # check for validation error
     validation_errors = login_page.wait_find_tag_elements_xpath_by_text('span', validation_msg_)
     time.sleep(2)
+    # check login is unsuccessful abd page remain in login page
     assert login_page.get_current_url() == login_page_url and len(validation_errors) == no_of_validation_msg_
 
 
 def test_invalid_credential_login(chrome_driver):
     login_page = LoginPage(chrome_driver)
-
     # go to login page
     login_page.open_page(login_page_url)
     # input invalid login credentials
