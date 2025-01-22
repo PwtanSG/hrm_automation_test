@@ -33,23 +33,30 @@ def test_can_login_logout(chrome_driver):
 @pytest.mark.parametrize("test_label_, username_, password_, no_of_validation_msg_, validation_msg_", [("no username", "", "admin123", 1, "Required"), ("no password", "Admin", "", 1, "Required"), ("no inputs", "", "", 2, "Required")])
 def test_no_input_login_validation(chrome_driver, test_label_, username_, password_, no_of_validation_msg_, validation_msg_):
     login_page = LoginPage(chrome_driver)
+    # go to login page
     login_page.open_page(login_page_url)
+    # login without either username or password or without both inputs
     login_page.enter_username(username_)
     login_page.enter_password(password_)
+    # click login
     login_page.click_login()
     validation_errors = login_page.wait_find_tag_elements_xpath_by_text('span', validation_msg_)
     time.sleep(2)
-    # print(test_label_)
     assert login_page.get_current_url() == login_page_url and len(validation_errors) == no_of_validation_msg_
 
 
 def test_invalid_credential_login(chrome_driver):
     login_page = LoginPage(chrome_driver)
+
+    # go to login page
     login_page.open_page(login_page_url)
-    # time.sleep(2)
+    # input invalid login credentials
     login_page.enter_username("Admin")
     login_page.enter_password("admin1234")
+    # click login button
     login_page.click_login()
+    # check for validation error
     validation_error = login_page.find_error_invalid_credentials()
     time.sleep(2)
+    # check login is unsuccessful abd page remain in login page
     assert login_page.get_current_url() == login_page_url and validation_error
