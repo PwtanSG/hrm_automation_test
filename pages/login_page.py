@@ -2,10 +2,8 @@ import time
 from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, WebDriverException
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-import sys
 from base.base_driver import BaseDriver
+from utilities.utils import Utils
 
 
 class LoginPage(BaseDriver):
@@ -55,13 +53,15 @@ class LoginPage(BaseDriver):
     def select_user_profile_dropdown_menu(self, menu_label):
         click_avatar = self.click_user_profile_icon()
         time.sleep(1)
+
         if click_avatar:
             element_list = BaseDriver.wait_for_presence_of_elements_located(self, self.user_profile_dropdown_menu)
-            for menu_item in element_list:
-                if menu_item.text == menu_label:
-                    menu_item.click()
-                    return True
-            print('Menu not found : ' + menu_label)
+            ut = Utils()
+            logout_element = ut.find_element_by_text_from_list(menu_label, element_list)
+            if logout_element:
+                logout_element.click()
+                return True
+            print('Element not found : ' + menu_label)
 
     def get_current_url(self):
         # wait = WebDriverWait(self.driver, self.TIMEOUT_CONST)
