@@ -71,18 +71,6 @@ class LoginPage(BaseDriver):
 
     def assert_url(self, url_):
         return BaseDriver.wait_url_matches(self, url_)
-        # wait = WebDriverWait(self.driver, self.TIMEOUT_CONST)
-        # try:
-        #     result = wait.until(EC.url_matches(url_))
-        #     # result = wait.until(EC.url_to_be(url_))
-        #     if not result:
-        #         print("Url not matches")
-        #     time.sleep(2)
-        #     # self.take_screenshot()
-        #     return result
-        # except TimeoutException:
-        #     print('Timeout : ' + sys._getframe().f_code.co_name + ' Line:' + str(sys._getframe().f_lineno))
-        #     return False
 
     def find_error_invalid_credentials(self):
         error_msg_element = BaseDriver.wait_for_presence_of_element_located(self, self.error_invalid_credential)
