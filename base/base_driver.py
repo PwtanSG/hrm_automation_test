@@ -99,3 +99,17 @@ class BaseDriver:
         except TimeoutException:
             print('Timeout : ' + sys._getframe().f_code.co_name + ' Line:' + str(sys._getframe().f_lineno))
         return result
+
+    def wait_url_matches(self, url_):
+        wait = WebDriverWait(self.driver, self.TIMEOUT_CONST)
+        try:
+            result = wait.until(EC.url_matches(url_))
+            # result = wait.until(EC.url_to_be(url_))
+            if not result:
+                print("Url not matches")
+                # self.take_screenshot()
+            time.sleep(2)
+            return result
+        except TimeoutException:
+            print('Timeout : ' + sys._getframe().f_code.co_name + ' Line:' + str(sys._getframe().f_lineno))
+            return False

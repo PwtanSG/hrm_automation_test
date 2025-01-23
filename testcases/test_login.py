@@ -21,22 +21,22 @@ def test_can_login_logout(chrome_driver):
     # click login button
     login_page.click_login()
     # check url after login
-    login_success = login_page.check_url(auth_page_url)
+    login_success = login_page.assert_url(auth_page_url)
     login_page.page_scroll()
 
     # Log out test
     # verify successful logout clicking logout link from user profile dropdown menu
     login_page.click_user_profile_icon()
     select_menu_logout = login_page.select_user_profile_dropdown_menu("Logout")
-    logout_success = login_page.check_url(login_page_url)
+    logout_success = login_page.assert_url(login_page_url)
 
     # assert test results
     assert login_success and logout_success and select_menu_logout
 
 
 @pytest.mark.parametrize("test_label_, username_, password_, no_of_validation_msg_, validation_msg_",
-                         [("no username", "", "admin123", 1, "Required"), ("no password", "Admin", "", 1, "Required"),
-                          ("no inputs", "", "", 2, "Required")])
+                         [("no username login", "", "admin123", 1, "Required"), ("no password login", "Admin", "", 1, "Required"),
+                          ("no username/password login", "", "", 2, "Required")])
 def test_no_input_login_validation(chrome_driver, test_label_, username_, password_, no_of_validation_msg_,
                                    validation_msg_):
     login_page = LoginPage(chrome_driver)
@@ -51,7 +51,7 @@ def test_no_input_login_validation(chrome_driver, test_label_, username_, passwo
     validation_errors = login_page.wait_find_tag_elements_xpath_by_text('span', validation_msg_)
     time.sleep(2)
     # check login is unsuccessful abd page remain in login page
-    assert login_page.get_current_url() == login_page_url and len(validation_errors) == no_of_validation_msg_
+    assert login_page.assert_url(login_page_url) and len(validation_errors) == no_of_validation_msg_
 
 
 def test_invalid_credential_login(chrome_driver):
@@ -67,7 +67,7 @@ def test_invalid_credential_login(chrome_driver):
     validation_error = login_page.find_error_invalid_credentials()
     time.sleep(2)
     # check login is unsuccessful abd page remain in login page
-    assert login_page.get_current_url() == login_page_url and validation_error
+    assert login_page.assert_url(login_page_url) and validation_error
 
 
 def test_co_website_link(chrome_driver):
@@ -81,7 +81,7 @@ def test_co_website_link(chrome_driver):
     time.sleep(2)
     login_page.switch_to_child_browser_window()
     time.sleep(2)
-    co_website_success = login_page.check_url(co_website_url)
+    co_website_success = login_page.assert_url(co_website_url)
     title_check = login_page.wait_for_title_is(co_website_title)
     assert co_website_success and title_check
 
