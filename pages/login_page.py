@@ -113,22 +113,4 @@ class LoginPage(BaseDriver):
                 self.driver.switch_to.window(w)
                 break
         time.sleep(1)
-        # print("Child window title: " + self.driver.title)
 
-    def take_screenshot(self, filename_):
-        file_dir = path.join(os.getcwd(), "reports")
-        os.makedirs(file_dir, exist_ok=True)
-
-        wait = WebDriverWait(self.driver, self.TIMEOUT_CONST)
-        today = datetime.now()
-        image_name = filename_ + "" + today.strftime("%Y%m%d%H%M%S")
-        try:
-            time.sleep(1)
-            element = wait.until(EC.visibility_of_element_located(self.body))
-            file_path = path.join(file_dir, f"test_{image_name}.png")
-            element.screenshot(file_path)
-            # self.driver.get_screenshot_as_file(f"test_{image_name}.png")
-            return True
-        except TimeoutException:
-            print('Timeout : ' + sys._getframe().f_code.co_name + ' Line:' + str(sys._getframe().f_lineno))
-            return False

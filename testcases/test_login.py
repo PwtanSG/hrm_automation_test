@@ -66,6 +66,7 @@ def test_invalid_credential_login(chrome_driver):
     # check for validation error
     validation_error = login_page.find_error_invalid_credentials()
     time.sleep(2)
+    login_page.take_screenshot()
     # check login is unsuccessful abd page remain in login page
     assert login_page.assert_url(login_page_url) and validation_error
 

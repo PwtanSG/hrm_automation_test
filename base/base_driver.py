@@ -1,3 +1,5 @@
+from datetime import datetime
+import os
 import time
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, WebDriverException
 from selenium.webdriver.common.by import By
@@ -110,6 +112,24 @@ class BaseDriver:
                 # self.take_screenshot()
             time.sleep(2)
             return result
+        except TimeoutException:
+            print('Timeout : ' + sys._getframe().f_code.co_name + ' Line:' + str(sys._getframe().f_lineno))
+            return False
+
+    def take_screenshot(self):
+        file_dir = os.path.join(os.getcwd(), "reports")
+        os.makedirs(file_dir, exist_ok=True)
+
+        today = datetime.now()
+        image_name = today.strftime("%Y%m%d%H%M%S")
+        wait = WebDriverWait(self.driver, self.TIMEOUT_CONST)
+        try:
+            time.sleep(1)
+            element = wait.until(EC.visibility_of_element_located(self.body))
+            file_path = os.path.join(file_dir, f"test_{image_name}.png")
+            element.screenshot(file_path)
+            # self.driver.get_screenshot_as_file(f"test_{image_name}.png")
+            return True
         except TimeoutException:
             print('Timeout : ' + sys._getframe().f_code.co_name + ' Line:' + str(sys._getframe().f_lineno))
             return False
