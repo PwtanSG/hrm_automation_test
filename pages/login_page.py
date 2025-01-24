@@ -2,17 +2,9 @@ import time
 from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, WebDriverException
-from selenium.webdriver.support.wait import WebDriverWait
-
 from base.base_driver import BaseDriver
 from utilities.utils import Utils
-from datetime import datetime
-import os
 import time
-from os import path
-import sys
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 
 class LoginPage(BaseDriver):
@@ -77,9 +69,6 @@ class LoginPage(BaseDriver):
         # wait.until(EC.url_matches(expected_url))
         get_url = self.driver.current_url
         return str(get_url)
-
-    def assert_url(self, url_):
-        return self.wait_url_matches(url_)
 
     def find_error_invalid_credentials(self):
         error_msg_element = self.wait_for_presence_of_element_located(self.error_invalid_credential)

@@ -102,7 +102,7 @@ class BaseDriver:
             print('Timeout : ' + sys._getframe().f_code.co_name + ' Line:' + str(sys._getframe().f_lineno))
         return result
 
-    def wait_url_matches(self, url_):
+    def assert_url(self, url_):
         wait = WebDriverWait(self.driver, self.TIMEOUT_CONST)
         try:
             result = wait.until(EC.url_matches(url_))
