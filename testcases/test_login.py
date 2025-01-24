@@ -27,7 +27,7 @@ def test_can_login_logout(chrome_driver):
     # Log out test
     # verify successful logout clicking logout link from user profile dropdown menu
     login_page.click_user_profile_icon()
-    select_menu_logout = login_page.select_user_profile_dropdown_menu("Logouts")
+    select_menu_logout = login_page.select_user_profile_dropdown_menu("Logout")
     logout_success = login_page.assert_url(login_page_url)
 
     # assert test results

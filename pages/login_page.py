@@ -2,8 +2,17 @@ import time
 from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, WebDriverException
+from selenium.webdriver.support.wait import WebDriverWait
+
 from base.base_driver import BaseDriver
 from utilities.utils import Utils
+from datetime import datetime
+import os
+import time
+from os import path
+import sys
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class LoginPage(BaseDriver):
@@ -30,20 +39,20 @@ class LoginPage(BaseDriver):
         actions.send_keys(Keys.ENTER)
 
     def enter_username(self, username):
-        username_textbox = BaseDriver.wait_for_presence_of_element_located(self, self.username_textbox)
+        username_textbox = self.wait_for_presence_of_element_located(self.username_textbox)
         if username_textbox:
             username_textbox.send_keys(username)
 
     def enter_password(self, password):
-        password_textbox = BaseDriver.wait_for_presence_of_element_located(self, self.password_textbox)
+        password_textbox = self.wait_for_presence_of_element_located(self.password_textbox)
         if password_textbox:
             password_textbox.send_keys(password)
 
     def click_login(self):
-        BaseDriver.wait_for_element_to_be_clickable(self, self.login_button)
+        self.wait_for_element_to_be_clickable(self.login_button)
 
     def click_user_profile_icon(self):
-        user_profile_icon = BaseDriver.wait_for_presence_of_element_located(self, self.user_profile_icon)
+        user_profile_icon = self.wait_for_presence_of_element_located(self.user_profile_icon)
         result = False
         if user_profile_icon:
             user_profile_icon.click()
@@ -55,7 +64,7 @@ class LoginPage(BaseDriver):
         time.sleep(1)
 
         if click_avatar:
-            element_list = BaseDriver.wait_for_presence_of_elements_located(self, self.user_profile_dropdown_menu)
+            element_list = self.wait_for_presence_of_elements_located(self.user_profile_dropdown_menu)
             ut = Utils()
             logout_element = ut.find_element_by_text_from_list(menu_label, element_list)
             if logout_element:
@@ -70,17 +79,17 @@ class LoginPage(BaseDriver):
         return str(get_url)
 
     def assert_url(self, url_):
-        return BaseDriver.wait_url_matches(self, url_)
+        return self.wait_url_matches(url_)
 
     def find_error_invalid_credentials(self):
-        error_msg_element = BaseDriver.wait_for_presence_of_element_located(self, self.error_invalid_credential)
+        error_msg_element = self.wait_for_presence_of_element_located(self.error_invalid_credential)
         return True if error_msg_element else False
 
     def get_co_website_link(self):
-        return BaseDriver.wait_for_presence_of_element_located(self, self.co_website_link)
+        return self.wait_for_presence_of_element_located(self.co_website_link)
 
     def get_hyperlinks(self):
-        links = BaseDriver.wait_for_presence_of_elements_located(self, self.hyperlinks)
+        links = self.wait_for_presence_of_elements_located(self.hyperlinks)
         # links = self.driver.find_elements(By.XPATH, '//a')
 
     def find_element(self):
@@ -106,20 +115,20 @@ class LoginPage(BaseDriver):
         time.sleep(1)
         # print("Child window title: " + self.driver.title)
 
-    # def take_screenshot(self):
-    #     file_dir = path.join(os.getcwd(), "reports")
-    #     os.makedirs(file_dir, exist_ok=True)
-    #
-    #     wait = WebDriverWait(self.driver, self.TIMEOUT_CONST)
-    #     today = datetime.now()
-    #     image_name = today.strftime("%Y%m%d%H%M%S")
-    #     try:
-    #         time.sleep(1)
-    #         element = wait.until(EC.visibility_of_element_located(self.body))
-    #         file_path = path.join(file_dir, f"test_{image_name}.png")
-    #         element.screenshot(file_path)
-    #         # self.driver.get_screenshot_as_file(f"test_{image_name}.png")
-    #         return True
-    #     except TimeoutException:
-    #         print('Timeout : ' + sys._getframe().f_code.co_name + ' Line:' + str(sys._getframe().f_lineno))
-    #         return False
+    def take_screenshot(self, filename_):
+        file_dir = path.join(os.getcwd(), "reports")
+        os.makedirs(file_dir, exist_ok=True)
+
+        wait = WebDriverWait(self.driver, self.TIMEOUT_CONST)
+        today = datetime.now()
+        image_name = filename_ + "" + today.strftime("%Y%m%d%H%M%S")
+        try:
+            time.sleep(1)
+            element = wait.until(EC.visibility_of_element_located(self.body))
+            file_path = path.join(file_dir, f"test_{image_name}.png")
+            element.screenshot(file_path)
+            # self.driver.get_screenshot_as_file(f"test_{image_name}.png")
+            return True
+        except TimeoutException:
+            print('Timeout : ' + sys._getframe().f_code.co_name + ' Line:' + str(sys._getframe().f_lineno))
+            return False
