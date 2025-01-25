@@ -7,7 +7,8 @@ auth_page_url = "https://opensource-demo.orangehrmlive.com/web/index.php/dashboa
 reset_password_page_url = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/requestPasswordResetCode"
 co_website_url = "https://www.orangehrm.com/"
 co_website_title = "Human Resources Management Software | OrangeHRM"
-# https://opensource-demo.orangehrmlive.com/web/index.php/auth/sendPasswordReset
+reset_password_url = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/sendPasswordReset"
+password_reset_url = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/requestPasswordResetCode"
 
 
 def test_can_login_logout(chrome_driver):
@@ -85,6 +86,15 @@ def test_co_website_link(chrome_driver):
     co_website_success = login_page.assert_url(co_website_url)
     title_check = login_page.wait_for_title_is(co_website_title)
     assert co_website_success and title_check
+
+
+def test_forget_password_link(chrome_driver):
+    login_page = LoginPage(chrome_driver)
+    login_page.open_page(login_page_url)
+    test_forget_password_link_element = login_page.get_forget_password_link()
+    test_forget_password_link_element.click()
+    time.sleep(2)
+    assert login_page.assert_url(password_reset_url)
 
 
 # def test_hyperlinks(chrome_driver):

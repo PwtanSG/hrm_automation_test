@@ -18,11 +18,15 @@ Test user unable to login successfully with invalid credential  \
 Validate error message
 
 ### test_co_website_link
-Test company website hyperlink 
+Test company website hyperlink \
 Verify that browser open a tab that shows company website 
 
+### test_forget_password_link
+Test "forget password" link \
+Verify that page redirect to reset password request page
+
 ## script usage
-pytest -v testcases/test_login.py
+pytest -v testcases/test_login.py \
 pytest -v -s -k test_invalid_credential_login
 
 ## Demo video

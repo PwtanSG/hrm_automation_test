@@ -10,6 +10,7 @@ import time
 class LoginPage(BaseDriver):
 
     TIMEOUT_CONST = 10
+    # locators
     body = (By.TAG_NAME, "body")
     username_textbox = (By.NAME, "username")
     password_textbox = (By.NAME, "password")
@@ -18,6 +19,7 @@ class LoginPage(BaseDriver):
     user_profile_icon = (By.CLASS_NAME, "oxd-userdropdown-name")
     user_profile_dropdown_menu = (By.XPATH, "//a[@class='oxd-userdropdown-link']")
     co_website_link = (By.LINK_TEXT, "OrangeHRM, Inc")
+    forget_password_link = (By.CSS_SELECTOR, "p.oxd-text.oxd-text--p.orangehrm-login-forgot-header")
     hyperlinks = (By.TAG_NAME, "a")
     # hyperlinks = (By.XPATH, "//a[@text='OrangeHRM, Inc']")
 
@@ -75,6 +77,9 @@ class LoginPage(BaseDriver):
 
     def get_co_website_link(self):
         return self.wait_for_presence_of_element_located(self.co_website_link)
+
+    def get_forget_password_link(self):
+        return self.wait_for_presence_of_element_located(self.forget_password_link)
 
     def get_hyperlinks(self):
         links = self.wait_for_presence_of_elements_located(self.hyperlinks)
