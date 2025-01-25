@@ -10,21 +10,20 @@ import time
 class LoginPage(BaseDriver):
 
     TIMEOUT_CONST = 10
+    body = (By.TAG_NAME, "body")
+    username_textbox = (By.NAME, "username")
+    password_textbox = (By.NAME, "password")
+    login_button = (By.XPATH, "//button[@type='submit']")
+    error_invalid_credential = (By.XPATH, "//p[text()='Invalid credentials']")
+    user_profile_icon = (By.CLASS_NAME, "oxd-userdropdown-name")
+    user_profile_dropdown_menu = (By.XPATH, "//a[@class='oxd-userdropdown-link']")
+    co_website_link = (By.LINK_TEXT, "OrangeHRM, Inc")
+    hyperlinks = (By.TAG_NAME, "a")
+    # hyperlinks = (By.XPATH, "//a[@text='OrangeHRM, Inc']")
 
     def __init__(self, driver):
         BaseDriver.__init__(driver)
         self.driver = driver
-        self.body = (By.TAG_NAME, "body")
-        self.username_textbox = (By.NAME, "username")
-        self.password_textbox = (By.NAME, "password")
-        self.login_button = (By.XPATH, "//button[@type='submit']")
-        self.error_invalid_credential = (By.XPATH, "//p[text()='Invalid credentials']")
-        self.user_profile_icon = (By.CLASS_NAME, "oxd-userdropdown-name")
-        # self.user_profile_icon = (By.XPATH, "//p[@class='oxd-userdropdown-name']")
-        self.user_profile_dropdown_menu = (By.XPATH, "//a[@class='oxd-userdropdown-link']")
-        self.co_website_link = (By.LINK_TEXT, "OrangeHRM, Inc")
-        self.hyperlinks = (By.TAG_NAME, "a")
-        # self.hyperlinks = (By.XPATH, "//a[@text='OrangeHRM, Inc']")
 
     def keyboard_press(self, keyname):
         actions = ActionChains(self.driver)
