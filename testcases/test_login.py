@@ -36,7 +36,8 @@ def test_can_login_logout(chrome_driver):
 
 
 @pytest.mark.parametrize("test_label_, username_, password_, no_of_validation_msg_, validation_msg_",
-                         [("no username login", "", "admin123", 1, "Required"), ("no password login", "Admin", "", 1, "Required"),
+                         [("no username login", "", "admin123", 1, "Required"),
+                          ("no password login", "Admin", "", 1, "Required"),
                           ("no username/password login", "", "", 2, "Required")])
 def test_no_input_login_validation(chrome_driver, test_label_, username_, password_, no_of_validation_msg_,
                                    validation_msg_):
@@ -55,21 +56,23 @@ def test_no_input_login_validation(chrome_driver, test_label_, username_, passwo
     assert login_page.assert_url(login_page_url) and len(validation_errors) == no_of_validation_msg_
 
 
-def test_invalid_credential_login(chrome_driver):
+@pytest.mark.parametrize("test_label_, username_, password_", [("Wrong password", "Admin", "admin1234"),
+                                                               ("Wrong username", "admin1", "admin123")])
+def test_invalid_credential_login(chrome_driver, test_label_, username_, password_):
     login_page = LoginPage(chrome_driver)
     # go to login page
     login_page.open_page(login_page_url)
     # input invalid login credentials
-    login_page.enter_username("Admin")
-    login_page.enter_password("admin1234")
+    login_page.enter_username(username_)
+    login_page.enter_password(password_)
     # click login button
     login_page.click_login()
     # check for validation error
-    validation_error = login_page.find_error_invalid_credentials()
+    assert_validation_error = login_page.find_error_invalid_credentials()
     time.sleep(2)
     login_page.take_screenshot()
     # check login is unsuccessful abd page remain in login page
-    assert login_page.assert_url(login_page_url) and validation_error
+    assert login_page.assert_url(login_page_url) and assert_validation_error
 
 
 def test_co_website_link(chrome_driver):
@@ -90,7 +93,9 @@ def test_co_website_link(chrome_driver):
 
 def test_forget_password_link(chrome_driver):
     login_page = LoginPage(chrome_driver)
+    # navigate to login page
     login_page.open_page(login_page_url)
+    # find forget password link and click
     test_forget_password_link_element = login_page.get_forget_password_link()
     test_forget_password_link_element.click()
     time.sleep(2)
