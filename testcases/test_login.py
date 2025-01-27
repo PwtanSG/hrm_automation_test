@@ -1,6 +1,8 @@
+import os
 import time
 import pytest
 from pages.login_page import LoginPage
+from dotenv import load_dotenv
 
 login_page_url = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"
 auth_page_url = "https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index"
@@ -9,6 +11,11 @@ co_website_url = "https://www.orangehrm.com/"
 co_website_title = "Human Resources Management Software | OrangeHRM"
 reset_password_url = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/sendPasswordReset"
 password_reset_url = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/requestPasswordResetCode"
+load_dotenv()
+valid_username = os.getenv('VALID_USERNAME')
+valid_password = os.getenv('VALID_PASSWORD')
+invalid_username = "admin1"
+invalid_password = "abc1234"
 
 
 def login_application(login_page_, username_, password_):
@@ -25,7 +32,7 @@ def test_can_login_logout(chrome_driver):
     # Log in test
     login_page = LoginPage(chrome_driver)
     # Log in
-    login_application(login_page, "Admin", "admin123")
+    login_application(login_page, valid_username, valid_password)
     # assert page redirect to Admin page after login
     login_success = login_page.assert_url(auth_page_url)
     login_page.page_scroll()
@@ -41,8 +48,8 @@ def test_can_login_logout(chrome_driver):
 
 
 @pytest.mark.parametrize("test_label_, username_, password_, no_of_validation_msg_, validation_msg_",
-                         [("no username login", "", "admin123", 1, "Required"),
-                          ("no password login", "Admin", "", 1, "Required"),
+                         [("no username login", "", valid_password, 1, "Required"),
+                          ("no password login", valid_username, "", 1, "Required"),
                           ("no username/password login", "", "", 2, "Required")])
 def test_no_input_login_validation(chrome_driver, test_label_, username_, password_, no_of_validation_msg_,
                                    validation_msg_):
@@ -56,8 +63,8 @@ def test_no_input_login_validation(chrome_driver, test_label_, username_, passwo
     assert login_page.assert_url(login_page_url) and len(validation_errors) == no_of_validation_msg_
 
 
-@pytest.mark.parametrize("test_label_, username_, password_", [("Wrong password", "Admin", "admin1234"),
-                                                               ("Wrong username", "admin1", "admin123")])
+@pytest.mark.parametrize("test_label_, username_, password_", [("Wrong password", valid_username, invalid_password),
+                                                               ("Wrong username", invalid_username, valid_password)])
 def test_invalid_credential_login(chrome_driver, test_label_, username_, password_):
     login_page = LoginPage(chrome_driver)
     # login with invalid credentials
