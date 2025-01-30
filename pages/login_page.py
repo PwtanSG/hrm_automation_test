@@ -1,14 +1,18 @@
+import os
+import time
+
 from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, WebDriverException
 from base.base_driver import BaseDriver
 from utilities.utils import Utils
-import time
+from dotenv import load_dotenv
 
 
 class LoginPage(BaseDriver):
 
     TIMEOUT_CONST = 10
+
     # locators
     body = (By.TAG_NAME, "body")
     username_textbox = (By.NAME, "username")
@@ -21,6 +25,11 @@ class LoginPage(BaseDriver):
     forget_password_link = (By.CSS_SELECTOR, "p.oxd-text.oxd-text--p.orangehrm-login-forgot-header")
     hyperlinks = (By.TAG_NAME, "a")
     # hyperlinks = (By.XPATH, "//a[@text='OrangeHRM, Inc']")
+
+    # application admin login credentials
+    load_dotenv()
+    valid_username = os.getenv('VALID_USERNAME')
+    valid_password = os.getenv('VALID_PASSWORD')
 
     def __init__(self, driver):
         BaseDriver.__init__(driver)
