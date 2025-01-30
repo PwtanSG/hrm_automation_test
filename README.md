@@ -23,11 +23,20 @@ Verify that browser open a tab that shows company website
 
 ### test_forget_password_link
 Test "forget password" link \
-Verify that page redirect to reset password request page
+Verify that page redirect to reset password request page \
+
+/testcases/test_login.py
+### test_main_menu_search_clear
+Test and check search menu functionalities \
+
+### test_main_menu_list
+Test and check all menu exist on menu list \ 
 
 ## script usage
 pytest -v testcases/test_login.py \
-pytest -v -s -k test_invalid_credential_login
+pytest -v -s -k test_invalid_credential_login \
+pytest -v testcases/test_main_menu.py \
+
 
 ## Demo video
 [https://www.youtube.com/watch?v=XtnMgxRbjAc]
