@@ -18,21 +18,11 @@ invalid_username = "admin1"
 invalid_password = "abc1234"
 
 
-def login_application(login_page_, username_, password_):
-    # open browser and go to login page
-    login_page_.open_page(login_page_url)
-    # fill in username and password
-    login_page_.enter_username(username_)
-    login_page_.enter_password(password_)
-    # click login button
-    login_page_.click_login()
-
-
 def test_can_login_logout(chrome_driver):
     # Log in test
     login_page = LoginPage(chrome_driver)
     # Log in
-    login_application(login_page, valid_username, valid_password)
+    login_page.login_application(login_page_url, valid_username, valid_password)
     # assert page redirect to Admin page after login
     login_success = login_page.assert_url(auth_page_url)
     login_page.page_scroll()
@@ -55,7 +45,7 @@ def test_no_input_login_validation(chrome_driver, test_label_, username_, passwo
                                    validation_msg_):
     login_page = LoginPage(chrome_driver)
     # login without either username or password or without both inputs
-    login_application(login_page, username_, password_)
+    login_page.login_application(login_page_url, username_, password_)
     # check for validation error
     validation_errors = login_page.wait_find_tag_elements_xpath_by_text('span', validation_msg_)
     time.sleep(2)
@@ -68,7 +58,7 @@ def test_no_input_login_validation(chrome_driver, test_label_, username_, passwo
 def test_invalid_credential_login(chrome_driver, test_label_, username_, password_):
     login_page = LoginPage(chrome_driver)
     # login with invalid credentials
-    login_application(login_page, username_, password_)
+    login_page.login_application(login_page_url, username_, password_)
     # check for validation error
     assert_validation_error = login_page.find_error_invalid_credentials()
     time.sleep(2)
@@ -88,6 +78,7 @@ def test_co_website_link(chrome_driver):
     time.sleep(2)
     login_page.switch_to_child_browser_window()
     time.sleep(2)
+    # assert test result
     co_website_success = login_page.assert_url(co_website_url)
     title_check = login_page.wait_for_title_is(co_website_title)
     assert co_website_success and title_check
@@ -101,4 +92,5 @@ def test_forget_password_link(chrome_driver):
     test_forget_password_link_element = login_page.get_forget_password_link()
     test_forget_password_link_element.click()
     time.sleep(2)
+    # assert test result
     assert login_page.assert_url(password_reset_url)

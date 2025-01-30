@@ -106,3 +106,11 @@ class LoginPage(BaseDriver):
                 break
         time.sleep(1)
 
+    def login_application(self, login_page_url_, username_, password_):
+        # open browser and go to login page
+        self.open_page(login_page_url_)
+        # fill in username and password
+        self.enter_username(username_)
+        self.enter_password(password_)
+        # click login button
+        self.click_login()
