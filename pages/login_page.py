@@ -30,6 +30,7 @@ class LoginPage(BaseDriver):
     load_dotenv()
     valid_username = os.getenv('VALID_USERNAME')
     valid_password = os.getenv('VALID_PASSWORD')
+    login_page_url = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"
 
     def __init__(self, driver):
         BaseDriver.__init__(driver)
