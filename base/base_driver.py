@@ -1,11 +1,12 @@
-from datetime import datetime
 import os
 import time
+import sys
+from datetime import datetime
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, WebDriverException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import sys
+from selenium.webdriver import ActionChains, Keys
 
 
 class BaseDriver:
@@ -133,3 +134,11 @@ class BaseDriver:
         except TimeoutException:
             print('Timeout : ' + sys._getframe().f_code.co_name + ' Line:' + str(sys._getframe().f_lineno))
             return False
+
+    def keyboard_press(self, keyname):
+        actions = ActionChains(self.driver)
+        actions.send_keys(Keys.ENTER)
+
+    @staticmethod
+    def keyboard_backspace( ):
+        return Keys.BACKSPACE
