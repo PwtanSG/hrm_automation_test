@@ -19,6 +19,9 @@ class BaseDriver:
         return self.driver.execute_script(
             "window.scrollTo(0, document.body.scrollHeight);var pageLength=document.body.scrollHeight")
 
+    def get_current_url(self):
+        return self.driver.current_url
+
     def page_scroll(self):
         time.sleep(2)
         page_length = self.get_page_length()
@@ -112,6 +115,16 @@ class BaseDriver:
                 print("Url not matches")
                 # self.take_screenshot()
             time.sleep(2)
+            return result
+        except TimeoutException:
+            print('Timeout : ' + sys._getframe().f_code.co_name + ' Line:' + str(sys._getframe().f_lineno))
+            return False
+
+    def wait_for_url_changes(self, url_):
+        wait = WebDriverWait(self.driver, self.TIMEOUT_CONST)
+        try:
+            result = wait.until(EC.url_changes(url_))
+            print(result)
             return result
         except TimeoutException:
             print('Timeout : ' + sys._getframe().f_code.co_name + ' Line:' + str(sys._getframe().f_lineno))
