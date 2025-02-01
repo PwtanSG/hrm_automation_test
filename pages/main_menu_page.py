@@ -10,6 +10,10 @@ class MainMenuPage(BaseDriver):
     body = (By.TAG_NAME, "body")
     search_textbox = (By.XPATH, "//input[@placeholder='Search']")
     menu_items = (By.XPATH, "//li[@class='oxd-main-menu-item-wrapper']")
+    menu_items_text = (By.XPATH, "//li//a//span")
+    menu_items_admin = (By.XPATH, "//li//a//span[text()='Admin']")
+    menu_item_text_xpath = (By.XPATH, "//li//a//span[text()='")
+    module_bread_crumb = (By.CSS_SELECTOR, "h6.oxd-text.oxd-text--h6.oxd-topbar-header-breadcrumb-module")
 
     full_menu_items = ['Admin', 'PIM', 'Leave', 'Time', 'Recruitment', 'My Info', 'Performance', 'Dashboard',
                        'Directory', 'Maintenance', 'Claim', 'Buzz']
@@ -50,3 +54,18 @@ class MainMenuPage(BaseDriver):
 
     def assert_menu_list(self, expected_menu_list_):
         return self.get_menu_items_list() == expected_menu_list_
+
+    def goto_menu_item(self, menu_text):
+        menu_item_xpath = (self.menu_item_text_xpath[0], self.menu_item_text_xpath[1] + menu_text + "']")
+        menu_item_element = self.wait_for_presence_of_element_located(menu_item_xpath)
+        menu_item_element.click()
+        module_bread_crumb_element = self.wait_for_presence_of_element_located(self.module_bread_crumb)
+        return module_bread_crumb_element.text == menu_text
+
+    def click_all_menu_items(self):
+        result = []
+        for menu_item_text in self.full_menu_items:
+            if menu_item_text != self.full_menu_items[9]:
+                result.append(self.goto_menu_item(menu_item_text))
+                time.sleep(3)
+        return result

@@ -27,9 +27,19 @@ def test_main_menu_search_clear(chrome_driver, test_label_, search_text_, expect
     assert assert_menu_item_found and assert_full_menu_items
 
 
-def test_main_menu_list(chrome_driver):
+def test_get_main_menu_list(chrome_driver):
     login_page = LoginPage(chrome_driver)
     login_page.login_application(login_page.login_page_url, login_page.valid_username, login_page.valid_password)
     main_menu_page = MainMenuPage(chrome_driver)
     time.sleep(2)
     assert main_menu_page.assert_menu_list(main_menu_page.full_menu_items)
+
+
+def test_main_menu_items(chrome_driver):
+    login_page = LoginPage(chrome_driver)
+    login_page.login_application(login_page.login_page_url, login_page.valid_username, login_page.valid_password)
+    main_menu_page = MainMenuPage(chrome_driver)
+    # main_menu_page.goto_menu_item('Admin')
+    result_list = main_menu_page.click_all_menu_items()
+    time.sleep(2)
+    assert all(result_list)

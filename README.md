@@ -32,6 +32,9 @@ Test and check search menu functionalities \
 ### test_main_menu_list
 Test and check all menu exist on menu list \ 
 
+### test_main_menu_items
+Test click each of the menu item and check the corresponding landing page
+
 ## script usage
 pytest -v testcases/test_login.py \
 pytest -v -s -k test_invalid_credential_login \
