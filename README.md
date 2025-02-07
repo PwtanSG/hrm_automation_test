@@ -35,10 +35,15 @@ Test and check all menu exist on menu list \
 ### test_main_menu_items
 Test click each of the menu item and check the corresponding landing page
 
+### test_search_employee_list_by_job_title
+Test employee list page filter and search functions
+
 ## script usage
 pytest -v testcases/test_login.py \
 pytest -v -s -k test_invalid_credential_login \
 pytest -v testcases/test_main_menu.py \
+pytest -v -s -k test_search_employee_list_by_job_title
+
 
 
 ## Demo video
