@@ -15,6 +15,9 @@ class BaseDriver:
     def __int__(self, driver):
         self.driver = driver
 
+    def maximize_browser_window(self):
+        return self.driver.maximize_window()
+
     def get_page_length(self):
         return self.driver.execute_script(
             "window.scrollTo(0, document.body.scrollHeight);var pageLength=document.body.scrollHeight")

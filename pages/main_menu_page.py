@@ -60,6 +60,7 @@ class MainMenuPage(BaseDriver):
         menu_item_element = self.wait_for_presence_of_element_located(menu_item_xpath)
         menu_item_element.click()
         module_bread_crumb_element = self.wait_for_presence_of_element_located(self.module_bread_crumb)
+        self.maximize_browser_window()
         return module_bread_crumb_element.text == menu_text
 
     def click_all_menu_items(self):
