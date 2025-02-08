@@ -120,7 +120,7 @@ class BaseDriver:
             time.sleep(2)
             return result
         except TimeoutException:
-            print('Timeout : ' + sys._getframe().f_code.co_name + ' Line:' + str(sys._getframe().f_lineno))
+            print('Timeout : ' + sys._getframe().f_code.co_name + ' Line:' + str(sys._getframe().f_lineno) + ' ' + url_)
             return False
 
     def wait_for_url_changes(self, url_):

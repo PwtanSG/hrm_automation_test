@@ -1,23 +1,37 @@
+import time
+
 from selenium.webdriver.common.by import By
 from base.base_driver import BaseDriver
+from utilities.utils import Utils
 
 
 class EmployeePage(BaseDriver):
     # locators
-    employee_found_count = (By.XPATH, "//div//span[@class='oxd-text oxd-text--span']")
+    top_nav_bar_menu_items = (By.XPATH, "//a[@href='#']")
+    input_textbox_elements = (By.XPATH, "//input[contains(@placeholder,'Type for hints')]")
+    job_title_filter_menu = (By.XPATH, "//div[@role='listbox']")
+    dropdown_elements_arrow = (By.XPATH, "//div[@class ='oxd-select-text--after']")
     search_button = (By.XPATH, "//button[@type='submit']")
     reset_button = (By.XPATH, "//button[@type='reset']")
-    dropdown_elements_arrow = (By.XPATH, "//div[@class ='oxd-select-text--after']")
-    job_title_filter_menu = (By.XPATH, "//div[@role='listbox']")
-    input_textbox_elements = (By.XPATH, "//input[contains(@placeholder,'Type for hints')]")
     result_rows = (By.XPATH, "//div[@class='oxd-table-row oxd-table-row--with-border oxd-table-row--clickable']")
+    employee_found_count = (By.XPATH, "//div//span[@class='oxd-text oxd-text--span']")
 
     main_menu_name_employee_page = 'PIM'
     employee_page_url = "https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewEmployeeList"
+    top_nav_menu_list = ['Employee List', 'Add Employee']
 
     def __init__(self, driver):
         BaseDriver.__init__(driver)
         self.driver = driver
+
+    def click_top_nav_menu_item(self, menu_item_name_):
+        if menu_item_name_ not in self.top_nav_menu_list:
+            return print('top nav menu item not found')
+        menu_items = self.wait_for_presence_of_elements_located(self.top_nav_bar_menu_items)
+        ut = Utils()
+        menu_item = ut.find_element_by_text_from_list(menu_item_name_, menu_items)
+        menu_item.click()
+        time.sleep(3)
 
     def get_count_element(self):
         return self.wait_for_presence_of_element_located(self.employee_found_count)
