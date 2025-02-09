@@ -15,10 +15,13 @@ class EmployeePage(BaseDriver):
     reset_button = (By.XPATH, "//button[@type='reset']")
     result_rows = (By.XPATH, "//div[@class='oxd-table-row oxd-table-row--with-border oxd-table-row--clickable']")
     employee_found_count = (By.XPATH, "//div//span[@class='oxd-text oxd-text--span']")
+    current_user_avatar = (By.XPATH, "//p[@class='oxd-userdropdown-name']")
+    # toast_msg_element = (By.XPATH, "//div[@class='oxd-toast oxd-toast--info oxd-toast-container--toast']")
+    # toast_msg_element = (By.XPATH, "//[@class='oxd-toast-start']")
 
     main_menu_name_employee_page = 'PIM'
     employee_page_url = "https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewEmployeeList"
-    top_nav_menu_list = ['Employee List', 'Add Employee']
+    top_nav_employee_list = 'Employee List'
 
     def __init__(self, driver):
         BaseDriver.__init__(driver)
@@ -78,5 +81,14 @@ class EmployeePage(BaseDriver):
                 results.append(False)
         return results
 
+    def get_current_user_name(self):
+        avatar_element = self.wait_for_presence_of_element_located(self.current_user_avatar)
+        return avatar_element.text
+
     def click_search_button(self):
         self.wait_for_element_to_be_clickable(self.search_button)
+
+    def toast_message(self):
+        toast_element = self.wait_for_presence_of_element_located(self.toast_msg_element)
+        print(toast_element)
+
