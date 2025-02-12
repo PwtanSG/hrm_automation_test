@@ -22,14 +22,14 @@ class EmployeePage(BaseDriver):
     main_menu_name_employee_page = 'PIM'
     employee_page_url = "https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewEmployeeList"
     top_nav_employee_list = 'Employee List'
+    result_columns = ['id', 'First (& Middle) Name', 'Last Name', 'Job Title', 'Employment Status', 'Sub Unit',
+                      'Supervisor', 'Actions']
 
     def __init__(self, driver):
         BaseDriver.__init__(driver)
         self.driver = driver
 
     def click_top_nav_menu_item(self, menu_item_name_):
-        # if menu_item_name_ not in self.top_nav_menu_list:
-        #     return print('top nav menu item not found')
         menu_items = self.wait_for_presence_of_elements_located(self.top_nav_bar_menu_items)
         ut = Utils()
         menu_item = ut.find_element_by_text_from_list(menu_item_name_, menu_items)
@@ -46,6 +46,7 @@ class EmployeePage(BaseDriver):
         if search_result == 'No Records Found':
             return 0
         else:
+            # (1) Record Found return value
             return int(search_result[1])
 
     def enter_name_input_box(self, text_):
@@ -66,9 +67,9 @@ class EmployeePage(BaseDriver):
             if menu_item.text == job_title_:
                 menu_item.click()
                 break
-        self.click_search_button()
-        result_rows = self.wait_for_presence_of_elements_located(self.result_rows)
-        return result_rows
+
+    def get_all_search_results(self):
+        return self.wait_for_presence_of_elements_located(self.result_rows)
 
     def assert_search_result_job_title(self, result_rows, job_title_):
         # 0 Employment Status, 1 include, 2 Job Title, 3 Sub Unit
@@ -88,9 +89,37 @@ class EmployeePage(BaseDriver):
         else:
             return all(result_rows) and len(result_rows) == self.get_search_result_count()
 
-    def get_current_user_name(self):
+    def get_current_user_name(self, return_name_option_='full_name'):
         avatar_element = self.wait_for_presence_of_element_located(self.current_user_avatar)
-        return avatar_element.text
+        full_name = avatar_element.text
+        match return_name_option_:
+            case 'last_name':
+                name = full_name.split()
+                return name[-1]
+            case 'first_name':
+                name = full_name.split()
+                return name[0]
+            case _:
+                return full_name
+
+    def assert_search_results_name(self, result_rows, value_):
+        results = []
+        first_name_col_ = 1
+        last_name_col_ = 2
+        for row in result_rows:
+            column_elements = row.find_elements(By.XPATH, '*')
+            if value_ in column_elements[first_name_col_].text or value_ in column_elements[last_name_col_].text:
+                results.append(True)
+                # print(column_elements[1].text + ' ' + column_elements[2].text + ' : ' + column_elements[4].text)
+            else:
+                print('F:' + column_elements[1].text + ' ' + column_elements[2].text + ' : ' + column_elements[4].text +
+                      ' incorrect' + ' ' + value_)
+                results.append(False)
+
+        if not result_rows:
+            return len(result_rows) == self.get_search_result_count()
+        else:
+            return all(result_rows) and len(result_rows) == self.get_search_result_count()
 
     def click_search_button(self):
         self.wait_for_element_to_be_clickable(self.search_button)
