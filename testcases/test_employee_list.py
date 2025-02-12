@@ -47,6 +47,4 @@ def test_employee_list_search_by_name(chrome_driver):
     employee_list_page.click_search_button()
     time.sleep(2)
     search_results_list = employee_list_page.get_all_search_results()
-    check_last_name_col = employee_list_page.assert_search_results_name(search_results_list, search_name_text)
-    check_first_name_col = employee_list_page.assert_search_results_name(search_results_list, search_name_text)
-    assert check_last_name_col or check_first_name_col
+    assert employee_list_page.assert_search_results_name(search_results_list, search_name_text)
