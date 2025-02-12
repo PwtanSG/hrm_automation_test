@@ -40,14 +40,12 @@ class EmployeePage(BaseDriver):
         return self.wait_for_presence_of_element_located(self.employee_found_count)
 
     def get_search_result_count(self):
-        count = 0
         search_count_element = self.wait_for_presence_of_element_located(self.employee_found_count)
         search_result = search_count_element.text
-        if search_result == 'No Records Found':
-            return 0
-        else:
+        if search_result != 'No Records Found':
             # (1) Record Found return value
             return int(search_result[1])
+        return 0
 
     def enter_name_input_box(self, text_):
         elements = self.wait_for_presence_of_elements_located(self.input_textbox_elements)
