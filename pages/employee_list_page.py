@@ -5,7 +5,7 @@ from base.base_driver import BaseDriver
 from utilities.utils import Utils
 
 
-class EmployeePage(BaseDriver):
+class EmployeeListPage(BaseDriver):
     # locators
     top_nav_bar_menu_items = (By.XPATH, "//a[@href='#']")
     input_textbox_elements = (By.XPATH, "//input[contains(@placeholder,'Type for hints')]")
