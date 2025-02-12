@@ -19,7 +19,7 @@ def test_goto_employee_list(chrome_driver):
     employee_list_page.assert_url(employee_list_page.employee_page_url)
 
 
-# @pytest.mark.parametrize("job_title_", ["HR Manager", "QA Lead"])
+@pytest.mark.parametrize("job_title_", ["HR Manager", "QA Lead"])
 def test_search_employee_list_by_job_title(chrome_driver, job_title_):
     login_page = LoginPage(chrome_driver)
     login_page.login_application(login_page.login_page_url, login_page.valid_username, login_page.valid_password)
