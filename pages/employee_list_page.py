@@ -28,8 +28,8 @@ class EmployeePage(BaseDriver):
         self.driver = driver
 
     def click_top_nav_menu_item(self, menu_item_name_):
-        if menu_item_name_ not in self.top_nav_menu_list:
-            return print('top nav menu item not found')
+        # if menu_item_name_ not in self.top_nav_menu_list:
+        #     return print('top nav menu item not found')
         menu_items = self.wait_for_presence_of_elements_located(self.top_nav_bar_menu_items)
         ut = Utils()
         menu_item = ut.find_element_by_text_from_list(menu_item_name_, menu_items)
@@ -58,8 +58,6 @@ class EmployeePage(BaseDriver):
         return elements[value_]
 
     def filter_by_dropdown_job_title(self, job_title_):
-        # 0 Employment Status, 1 include, 2 Job Title, 3 Sub Unit
-        results = []
         job_title_filter = self.get_dropdown_element(2)
         job_title_filter.click()
         filter_menu = self.wait_for_presence_of_element_located(self.job_title_filter_menu)
@@ -70,6 +68,11 @@ class EmployeePage(BaseDriver):
                 break
         self.click_search_button()
         result_rows = self.wait_for_presence_of_elements_located(self.result_rows)
+        return result_rows
+
+    def assert_search_result_job_title(self, result_rows, job_title_):
+        # 0 Employment Status, 1 include, 2 Job Title, 3 Sub Unit
+        results = []
         for row in result_rows:
             column_elements = row.find_elements(By.XPATH, '*')
             if column_elements[4].text == job_title_:
@@ -79,7 +82,11 @@ class EmployeePage(BaseDriver):
                 print(column_elements[1].text + ' ' + column_elements[2].text + ' : ' + column_elements[4].text +
                       ' incorrect job title')
                 results.append(False)
-        return results
+
+        if not result_rows:
+            return len(result_rows) == self.get_search_result_count()
+        else:
+            return all(result_rows) and len(result_rows) == self.get_search_result_count()
 
     def get_current_user_name(self):
         avatar_element = self.wait_for_presence_of_element_located(self.current_user_avatar)

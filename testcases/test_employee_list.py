@@ -26,14 +26,11 @@ def test_search_employee_list_by_job_title(chrome_driver, job_title_):
     main_menu_page = MainMenuPage(chrome_driver)
     employee_list_page = EmployeePage(chrome_driver)
     main_menu_page.goto_menu_item(employee_list_page.main_menu_name_employee_page)
-    employee_list_page.click_top_nav_menu_item(employee_list_page.top_nav_menu_list[0])
+    employee_list_page.click_top_nav_menu_item(employee_list_page.top_nav_employee_list)
     time.sleep(2)
-    results = employee_list_page.filter_by_dropdown_job_title(job_title_)
+    result_list = employee_list_page.filter_by_dropdown_job_title(job_title_)
     time.sleep(2)
-    if not results:
-        assert len(results) == employee_list_page.get_search_result_count()
-    else:
-        assert all(results) and len(results) == employee_list_page.get_search_result_count()
+    assert employee_list_page.assert_search_result_job_title(result_list, job_title_)
 
 
 def test_employee_list_search_by_name(chrome_driver):
