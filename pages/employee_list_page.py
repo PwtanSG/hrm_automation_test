@@ -9,6 +9,7 @@ class EmployeeListPage(BaseDriver):
     # locators
     top_nav_bar_menu_items = (By.XPATH, "//a[@href='#']")
     input_textbox_elements = (By.XPATH, "//input[contains(@placeholder,'Type for hints')]")
+    input_box_employee_id = (By.XPATH, "(//input[@class='oxd-input oxd-input--active'])[2]")
     job_title_filter_menu = (By.XPATH, "//div[@role='listbox']")
     dropdown_elements_arrow = (By.XPATH, "//div[@class ='oxd-select-text--after']")
     search_button = (By.XPATH, "//button[@type='submit']")
@@ -22,7 +23,7 @@ class EmployeeListPage(BaseDriver):
     main_menu_name_employee_page = 'PIM'
     employee_page_url = "https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewEmployeeList"
     top_nav_employee_list = 'Employee List'
-    result_columns = ['id', 'First (& Middle) Name', 'Last Name', 'Job Title', 'Employment Status', 'Sub Unit',
+    result_columns = ['', 'id', 'First (& Middle) Name', 'Last Name', 'Job Title', 'Employment Status', 'Sub Unit',
                       'Supervisor', 'Actions']
 
     def __init__(self, driver):
@@ -76,7 +77,6 @@ class EmployeeListPage(BaseDriver):
             column_elements = row.find_elements(By.XPATH, '*')
             if column_elements[4].text == job_title_:
                 results.append(True)
-                # print(column_elements[1].text + ' ' + column_elements[2].text + ' : ' + column_elements[4].text)
             else:
                 print(column_elements[1].text + ' ' + column_elements[2].text + ' : ' + column_elements[4].text +
                       ' incorrect job title')
@@ -102,16 +102,15 @@ class EmployeeListPage(BaseDriver):
 
     def assert_search_results_name(self, result_rows, value_):
         results = []
-        first_name_col_ = 1
-        last_name_col_ = 2
+        first_name_col_ = 2
+        last_name_col_ = 3
         for row in result_rows:
             column_elements = row.find_elements(By.XPATH, '*')
             if value_ in column_elements[first_name_col_].text or value_ in column_elements[last_name_col_].text:
                 results.append(True)
-                # print(column_elements[1].text + ' ' + column_elements[2].text + ' : ' + column_elements[4].text)
             else:
-                print('F:' + column_elements[1].text + ' ' + column_elements[2].text + ' : ' + column_elements[4].text +
-                      ' incorrect' + ' ' + value_)
+                print('Failed:' + column_elements[first_name_col_].text + ' ' + column_elements[last_name_col_].text +
+                      ' : incorrect' + ' ' + value_)
                 results.append(False)
 
         if not result_rows:
@@ -121,6 +120,31 @@ class EmployeeListPage(BaseDriver):
 
     def click_search_button(self):
         self.wait_for_element_to_be_clickable(self.search_button)
+
+    def search_by_employee_id(self, employee_id_):
+        input_box_element = self.wait_for_presence_of_element_located(self.input_box_employee_id)
+        input_box_element.send_keys(employee_id_)
+        time.sleep(1)
+        self.click_search_button()
+        time.sleep(1)
+
+    @staticmethod
+    def assert_search_result_by_id(result_list_, employee_id_, first_middle_name_, last_name_):
+        if len(result_list_) == 1:
+            search_result = result_list_[0]
+            column_elements = search_result.find_elements(By.XPATH, '*')
+            col_eid = column_elements[1]
+            col_first_middle_name = column_elements[2]
+            col_last_name = column_elements[3]
+
+            if col_eid.text == employee_id_ and col_first_middle_name.text == first_middle_name_ and \
+                    col_last_name.text == last_name_:
+                return True
+            else:
+                print(col_eid.text + ' ' + col_first_middle_name.text + ' : ' + col_last_name.text)
+                return False
+        print('No records found.')
+        return False
 
     def toast_message(self):
         toast_element = self.wait_for_presence_of_element_located(self.toast_msg_element)

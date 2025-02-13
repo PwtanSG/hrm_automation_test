@@ -19,31 +19,38 @@ Validate error message
 
 ### test_co_website_link
 Test company website hyperlink \
-Verify that browser open a tab that shows company website 
+Verify that browser open a tab that shows company website \
 
 ### test_forget_password_link
 Test "forget password" link \
 Verify that page redirect to reset password request page \
 
-/testcases/test_login.py
+/testcases/test_main_menu.py
 ### test_main_menu_search_clear
 Test and check search menu functionalities \
-
 ### test_main_menu_list
-Test and check all menu exist on menu list \ 
-
+Test and check all menu exist on menu list \
 ### test_main_menu_items
-Test click each of the menu item and check the corresponding landing page
+Test click each of the menu item and check the corresponding landing page \
 
+/testcases/test_employee_list.py
 ### test_search_employee_list_by_job_title
-Test employee list page filter and search functions
+Test employee list page filter and search functions \
+### test_employee_list_search_by_name
+Test employee list page search functions \
+
+
+/testcases/test_employee_add.py
+### test_search_employee_list_by_job_title
+Test employee add page add employee function \
+
 
 ## script usage
 pytest -v testcases/test_login.py \
 pytest -v -s -k test_invalid_credential_login \
 pytest -v testcases/test_main_menu.py \
 pytest -v -s -k test_search_employee_list_by_job_title
-
+pytest -v -s -k test_employee_add
 
 
 ## Demo video
