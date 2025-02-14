@@ -18,6 +18,20 @@ class BaseDriver:
     def maximize_browser_window(self):
         return self.driver.maximize_window()
 
+    def switch_to_child_browser_window(self):
+        # get current window handle
+        parent_window = self.driver.current_window_handle
+
+        # get first child window
+        wd = self.driver.window_handles
+
+        for w in wd:
+            # switch focus to child window
+            if w != parent_window:
+                self.driver.switch_to.window(w)
+                break
+        time.sleep(1)
+
     def get_page_length(self):
         return self.driver.execute_script(
             "window.scrollTo(0, document.body.scrollHeight);var pageLength=document.body.scrollHeight")

@@ -102,20 +102,6 @@ class LoginPage(BaseDriver):
             print('NoSuchElementException')
             return False
 
-    def switch_to_child_browser_window(self):
-        # get current window handle
-        parent_window = self.driver.current_window_handle
-
-        # get first child window
-        wd = self.driver.window_handles
-
-        for w in wd:
-            # switch focus to child window
-            if w != parent_window:
-                self.driver.switch_to.window(w)
-                break
-        time.sleep(1)
-
     def login_application(self, login_page_url_, username_, password_):
         # open browser and go to login page
         self.open_page(login_page_url_)
