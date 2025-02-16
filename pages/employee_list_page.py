@@ -17,6 +17,12 @@ class EmployeeListPage(BaseDriver):
     result_rows = (By.XPATH, "//div[@class='oxd-table-row oxd-table-row--with-border oxd-table-row--clickable']")
     employee_found_count = (By.XPATH, "//div//span[@class='oxd-text oxd-text--span']")
     current_user_avatar = (By.XPATH, "//p[@class='oxd-userdropdown-name']")
+    record_trash = (By.XPATH, "//button//i[@class='oxd-icon bi-trash']")
+    record_edit = (By.XPATH, "//button//i[@class='oxd-icon bi-pencil-fill']")
+    delete_modal = (By.XPATH, "//div[@class='orangehrm-modal-footer']")
+    modal_delete_button = (By.XPATH, "//i[@class='oxd-icon bi-trash oxd-button-icon']")
+    modal_cancel_button = (By.XPATH, "//button[text()=' No, Cancel ']")
+    # modal_delete_button = (By.XPATH, "//div[@class='orangehrm-modal-footer']//button[2]")
     # toast_msg_element = (By.XPATH, "//div[@class='oxd-toast oxd-toast--info oxd-toast-container--toast']")
     # toast_msg_element = (By.XPATH, "//[@class='oxd-toast-start']")
 
@@ -66,6 +72,10 @@ class EmployeeListPage(BaseDriver):
             if menu_item.text == job_title_:
                 menu_item.click()
                 break
+
+    def click_delete_employee_record(self):
+        delete_icon = self.wait_for_presence_of_element_located(self.record_trash)
+        delete_icon.click()
 
     def get_all_search_results(self):
         return self.wait_for_presence_of_elements_located(self.result_rows)
@@ -129,13 +139,18 @@ class EmployeeListPage(BaseDriver):
         time.sleep(1)
 
     @staticmethod
-    def assert_search_result_by_id(result_list_, employee_id_, first_middle_name_, last_name_):
+    def assert_search_result_by_id(result_list_, employee_id_, first_middle_name_=None, last_name_=None):
         if len(result_list_) == 1:
             search_result = result_list_[0]
             column_elements = search_result.find_elements(By.XPATH, '*')
             col_eid = column_elements[1]
             col_first_middle_name = column_elements[2]
             col_last_name = column_elements[3]
+
+            if not first_middle_name_ or not last_name_:
+                if col_eid.text == employee_id_:
+                    return True
+                return False
 
             if col_eid.text == employee_id_ and col_first_middle_name.text == first_middle_name_ and \
                     col_last_name.text == last_name_:
@@ -149,4 +164,12 @@ class EmployeeListPage(BaseDriver):
     def toast_message(self):
         toast_element = self.wait_for_presence_of_element_located(self.toast_msg_element)
         print(toast_element)
+
+    def click_modal_delete_button(self):
+        modal_footer = self.wait_for_visibility_of_element_located(self.delete_modal)
+        delete_button_ele = modal_footer.find_element(*self.modal_delete_button)
+        # cancel_button_ele = modal_footer.find_element(*self.modal_cancel_button)
+        time.sleep(1)
+        delete_button_ele.click()
+        time.sleep(1)
 

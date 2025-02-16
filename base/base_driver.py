@@ -104,11 +104,11 @@ class BaseDriver:
 
         return elements_
 
-    def wait_for_visibility_of_element_located(self, tag_):
+    def wait_for_visibility_of_element_located(self, locator_):
         wait = WebDriverWait(self.driver, self.TIMEOUT_CONST)
         try:
             time.sleep(1)
-            element = wait.until(EC.visibility_of_element_located(tag_))
+            element = wait.until(EC.visibility_of_element_located(locator_))
             return element
         except TimeoutException:
             print('Timeout : ' + sys._getframe().f_code.co_name + ' Line:' + str(sys._getframe().f_lineno))

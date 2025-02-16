@@ -38,6 +38,8 @@ Test click each of the menu item and check the corresponding landing page
 Test employee list page filter and search functions 
 ### test_employee_list_search_by_name
 Test employee list page search functions 
+### test_delete_employee_record
+Test delete employee record from employee list
 
 
 /testcases/test_employee_add.py
