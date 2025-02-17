@@ -2,6 +2,7 @@ import time
 
 from selenium.webdriver.common.by import By
 from base.base_driver import BaseDriver
+from pages.main_menu_page import MainMenuPage
 from utilities.utils import Utils
 
 
@@ -132,14 +133,38 @@ class EmployeeListPage(BaseDriver):
         self.wait_for_element_to_be_clickable(self.search_button)
 
     def search_by_employee_id(self, employee_id_):
+        reset_btn = self.wait_for_presence_of_element_located(self.reset_button)
         input_box_element = self.wait_for_presence_of_element_located(self.input_box_employee_id)
+        if input_box_element.get_attribute('value'):
+            reset_btn.click()
+        time.sleep(1)
         input_box_element.send_keys(employee_id_)
         time.sleep(1)
         self.click_search_button()
         time.sleep(1)
+        if not self.get_search_result_count():
+            return []
+        return self.get_all_search_results()
+
+    def get_first_search_result_eid(self):
+        reset_btn = self.wait_for_presence_of_element_located(self.reset_button).click()
+        self.click_search_button()
+        search_results = self.get_all_search_results()
+        first_rec = search_results[0]
+        column_elements = first_rec.find_elements(By.XPATH, '*')
+        col_eid = column_elements[1]
+        return col_eid.text
 
     @staticmethod
     def assert_search_result_by_id(result_list_, employee_id_, first_middle_name_=None, last_name_=None):
+        """
+        validate employee record by employee id and validate record matches employee id, name(optional)
+        :param result_list_:
+        :param employee_id_: required
+        :param first_middle_name_: optional
+        :param last_name_: optional
+        :return: True if found
+        """
         if len(result_list_) == 1:
             search_result = result_list_[0]
             column_elements = search_result.find_elements(By.XPATH, '*')
@@ -147,11 +172,13 @@ class EmployeeListPage(BaseDriver):
             col_first_middle_name = column_elements[2]
             col_last_name = column_elements[3]
 
+            # validate with employee id ONLY
             if not first_middle_name_ or not last_name_:
                 if col_eid.text == employee_id_:
                     return True
                 return False
 
+            # validate with employee id and name
             if col_eid.text == employee_id_ and col_first_middle_name.text == first_middle_name_ and \
                     col_last_name.text == last_name_:
                 return True
@@ -173,3 +200,17 @@ class EmployeeListPage(BaseDriver):
         delete_button_ele.click()
         time.sleep(1)
 
+    def delete_employee_record_by_id(self, employee_id):
+        self.click_top_nav_menu_item(self.top_nav_employee_list)
+        time.sleep(1)
+        search_results_list = self.search_by_employee_id(employee_id)
+        if not search_results_list:
+            print('Fail Employee id : ' + employee_id + " not found")
+            return False
+        record_found = self.assert_search_result_by_id(search_results_list, employee_id)
+        if record_found:
+            self.click_delete_employee_record()
+            time.sleep(1)
+            self.click_modal_delete_button()
+            return True
+        return False

@@ -51,17 +51,16 @@ def test_employee_list_search_by_name(chrome_driver):
 
 
 def test_delete_employee_record(chrome_driver):
+    rs_list = []
+
     login_page = LoginPage(chrome_driver)
     login_page.login_application(login_page.login_page_url, login_page.valid_username, login_page.valid_password)
     main_menu_page = MainMenuPage(chrome_driver)
     employee_list_page = EmployeeListPage(chrome_driver)
     main_menu_page.goto_menu_item(employee_list_page.main_menu_name_employee_page)
-    employee_list_page.click_top_nav_menu_item(employee_list_page.top_nav_employee_list)
+    del_eid = employee_list_page.get_first_search_result_eid()
+    record_delete = employee_list_page.delete_employee_record_by_id(del_eid)
     time.sleep(1)
-    employee_list_page.search_by_employee_id('0312')
-    time.sleep(1)
-    search_results_list = employee_list_page.get_all_search_results()
-    employee_list_page.assert_search_result_by_id(search_results_list, '0312')
-    employee_list_page.click_delete_employee_record()
-    time.sleep(1)
-    employee_list_page.click_modal_delete_button()
+    if record_delete:
+        rs_list = employee_list_page.search_by_employee_id(del_eid)
+    assert record_delete and not rs_list
