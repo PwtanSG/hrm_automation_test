@@ -18,16 +18,19 @@ def test_employee_add(chrome_driver):
     employee_add_page.enter_middle_name('J')
     employee_add_page.enter_last_name('Trumpet')
     new_eid = employee_add_page.get_employee_id_value()
-    print(new_eid)
     employee_add_page.enter_employee_id('T')
+    new_eid = new_eid + 'T'
     time.sleep(1)
     employee_add_page.click_save_button()
     time.sleep(3)
     employee_add_page.click_top_nav_menu_item(employee_lp.top_nav_employee_list)
-    employee_lp.search_by_employee_id(new_eid + 'T')
+    employee_lp.search_by_employee_id(new_eid)
     employee_lp.click_search_button()
     time.sleep(2)
     result_list = employee_lp.get_all_search_results()
-    employee_lp.assert_search_result_by_id(result_list, new_eid + 'T', 'Donald J', 'Trumpet')
+    new_rec_found = employee_lp.assert_search_result_by_id(result_list, new_eid, 'Donald J', 'Trumpet')
+    if new_rec_found:
+        employee_lp.delete_employee_record_by_id(new_eid)
+    assert new_rec_found
 
 
