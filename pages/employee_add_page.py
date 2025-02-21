@@ -13,6 +13,7 @@ class EmployeeAddPage(BaseDriver):
     middle_name = (By.NAME, "middleName")
     last_name = (By.NAME, "lastName")
     employee_id = (By.XPATH, "(//input[@class='oxd-input oxd-input--active'])[2]")
+    menu_search_eid_input = (By.XPATH, "//input[@class='oxd-input oxd-input--active']")
     cancel_button = (By.XPATH, "//button[text()=' Cancel ']")
     # save_button = (By.XPATH, "//button[text()=' Save ']")
     save_button = (By.XPATH, "//button[@type='submit']")
@@ -41,6 +42,14 @@ class EmployeeAddPage(BaseDriver):
     def enter_employee_id(self, id_):
         eid_input_box = self.wait_for_presence_of_element_located(self.employee_id)
         eid_input_box.send_keys(id_)
+
+    def enter_eid(self, id_):
+        input_boxes = self.wait_for_presence_of_elements_located(self.menu_search_eid_input)
+        print(len(input_boxes))
+        for input_ele in input_boxes:
+            if not input_ele.get_attribute('placeholder'):
+                print(input.ele)
+                input.ele.send_keys(id_)
 
     def click_save_button(self):
         button_ele = self.wait_for_presence_of_element_located(self.save_button)

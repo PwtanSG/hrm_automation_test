@@ -165,10 +165,22 @@ class BaseDriver:
             print('Timeout : ' + sys._getframe().f_code.co_name + ' Line:' + str(sys._getframe().f_lineno))
             return False
 
+    def clear_input_box(self, locator_):
+        input_box_element = self.wait_for_presence_of_element_located(locator_)
+        if input_box_element:
+            input_box_element.click()
+            content = input_box_element.get_attribute('value')
+            content_length = len(content)
+            i = 0
+            while i < content_length:
+                input_box_element.send_keys(self.keyboard_backspace())
+                time.sleep(0.3)
+                i += 1
+
     def keyboard_press(self, keyname):
         actions = ActionChains(self.driver)
         actions.send_keys(Keys.ENTER)
 
     @staticmethod
-    def keyboard_backspace( ):
+    def keyboard_backspace():
         return Keys.BACKSPACE
