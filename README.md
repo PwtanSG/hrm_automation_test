@@ -46,6 +46,9 @@ Test delete employee record from employee list
 ### test_search_employee_list_by_job_title
 Test employee add page add employee function 
 
+/testcases/test_employee_edit.py
+### test_employee_record_edit
+
 ## script usage
 pytest -v testcases/test_login.py \
 pytest -v -s -k test_invalid_credential_login \

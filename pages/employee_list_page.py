@@ -147,13 +147,15 @@ class EmployeeListPage(BaseDriver):
         return self.get_all_search_results()
 
     def get_first_search_result_eid(self):
-        reset_btn = self.wait_for_presence_of_element_located(self.reset_button).click()
+        self.wait_for_presence_of_element_located(self.reset_button).click()
         self.click_search_button()
-        search_results = self.get_all_search_results()
-        first_rec = search_results[0]
-        column_elements = first_rec.find_elements(By.XPATH, '*')
-        col_eid = column_elements[1]
-        return col_eid.text
+        if self.get_search_result_count():
+            search_results = self.get_all_search_results()
+            first_rec = search_results[0]
+            column_elements = first_rec.find_elements(By.XPATH, '*')
+            col_eid = column_elements[1]
+            return col_eid.text
+        return '0'
 
     @staticmethod
     def assert_search_result_by_id(result_list_, employee_id_, first_middle_name_=None, last_name_=None):
@@ -214,3 +216,8 @@ class EmployeeListPage(BaseDriver):
             self.click_modal_delete_button()
             return True
         return False
+
+    def click_edit_emp_button(self):
+        edit_button = self.wait_for_presence_of_element_located(self.record_edit)
+        edit_button.click()
+        self.maximize_browser_window()

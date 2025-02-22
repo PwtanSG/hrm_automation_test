@@ -51,6 +51,10 @@ class BaseDriver:
                 match = True
         time.sleep(2)
 
+    def scroll_to_element(self, locator_):
+        element = self.wait_for_presence_of_element_located(locator_)
+        self.driver.execute_script("arguments[0].scrollIntoView()", element)
+
     def open_page(self, url_):
         self.driver.get(url_)
         wait = WebDriverWait(self.driver, self.TIMEOUT_CONST)
