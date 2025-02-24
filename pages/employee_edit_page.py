@@ -8,6 +8,7 @@ class EmployeeEditPage(BaseDriver):
 
     # locator
     nationality_dropdown = (By.XPATH, "(//div[@class='oxd-select-text--after'])[1]")
+    nationality_field = (By.XPATH, "(//div[@class='oxd-select-text-input'])[1]")
     dropdown_elements_arrow = (By.XPATH, "//div[@class='oxd-select-text--after']")
     nationality_menu = (By.XPATH, "//div[@role='listbox']")
     license_expiry_date_label = (By.XPATH, "//label[text()='License Expiry Date']")
@@ -51,6 +52,10 @@ class EmployeeEditPage(BaseDriver):
         self.select_by_dropdown("Nationality", nationality_)
         time.sleep(2)
 
+    def get_selected_nationality(self):
+        nationality_ele = self.wait_for_presence_of_element_located(self.nationality_field)
+        return nationality_ele.text
+
     def click_date_of_birth_field(self):
         element = self.wait_for_presence_of_element_located(self.date_of_birth_dropdown)
         element.click()
@@ -63,7 +68,7 @@ class EmployeeEditPage(BaseDriver):
     def get_dob_calendar_elements(self):
         elements = self.wait_for_presence_of_elements_located(self.dob_calendar_elements)
         items = elements[0].find_elements(By.XPATH, '*')
-        print(items[0].get_attribute('innerHTML'))
+        # print(items[0].get_attribute('innerHTML'))
         # time.sleep(2)
         return items[0]
 
@@ -74,8 +79,8 @@ class EmployeeEditPage(BaseDriver):
         date_element = ut.find_element_by_text_from_list(date_, date_elements)
         date_element.click()
         time.sleep(3)
-        dob_yyyy_dd_mm_field = self.wait_for_presence_of_element_located(self.dob_selected_yyyy_dd_mm)
-        return dob_yyyy_dd_mm_field.get_attribute('value')
+        dob_yyyy_mm_dd_field = self.wait_for_presence_of_element_located(self.dob_selected_yyyy_dd_mm)
+        return dob_yyyy_mm_dd_field.get_attribute('value')
 
     def click_dob_left_arrow(self, no_of_click_=1):
         calendar_elements_ = self.get_dob_calendar_elements()
@@ -86,9 +91,9 @@ class EmployeeEditPage(BaseDriver):
             no_of_click_ -= 1
         time.sleep(1)
 
-    def assert_dob_field(self, yyyy_dd_mm_):
+    def get_dob_field(self):
         dob_yyyy_dd_mm_field = self.wait_for_presence_of_element_located(self.dob_selected_yyyy_dd_mm)
-        return dob_yyyy_dd_mm_field.get_attribute('value') == yyyy_dd_mm_
+        return dob_yyyy_dd_mm_field.get_attribute('value')
 
     def select_gender(self, gender_=None):
 
@@ -103,11 +108,17 @@ class EmployeeEditPage(BaseDriver):
     def get_selected_gender(self):
         gender_elements = self.wait_for_presence_of_elements_located(self.gender_elements)
         for ele in gender_elements:
-            print(ele.get_attribute("checked"))
-            print(ele.is_selected())
+            # print(ele.get_attribute("checked"))
             if ele.is_selected():
                 gender_label = ele.find_element(By.XPATH, '..')
                 return gender_label.text
+
+    def toggle_gender(self):
+        gender_elements = self.wait_for_presence_of_elements_located(self.gender_elements)
+        for ele in gender_elements:
+            if not ele.is_selected():
+                self.driver.execute_script("arguments[0].click();", ele)
+        return self.get_selected_gender()
 
     def assert_gender_option(self, gender_):
         return self.get_selected_gender() == gender_
@@ -115,3 +126,10 @@ class EmployeeEditPage(BaseDriver):
     def click_save_personal_details(self):
         personal_details_save = self.wait_for_presence_of_element_located(self.personal_details_save_btn)
         personal_details_save.click()
+
+    def assert_edited_record(self, test_data_dict):
+        updated_nationality = self.get_selected_nationality() == test_data_dict['Nationality']
+        updated_gender = self.get_selected_gender() == test_data_dict['Gender']
+        updated_dob = self.get_dob_field() == test_data_dict['Date of birth']
+        return updated_nationality and updated_gender and updated_dob
+
