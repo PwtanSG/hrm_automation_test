@@ -1,4 +1,6 @@
 import time
+from random import randrange
+
 from selenium.webdriver.common.by import By
 from base.base_driver import BaseDriver
 from utilities.utils import Utils
@@ -23,6 +25,10 @@ class EmployeeEditPage(BaseDriver):
     gender_female = (By.XPATH, ".//input[@value='2']")
     gender_elements = (By.XPATH, "//input[@type='radio']")
     personal_details_save_btn = (By.XPATH, "(//button[@type='submit'])[1]")
+
+    # variables
+    nationalities = ["American", "British", "Chinese", "Singaporean", "Taiwanese", "Vietnamese", "Zimbabwean",
+                     "Malaysian", "Lebanese", "Japanese"]
 
     def __init__(self, driver):
         BaseDriver.__init__(driver)
@@ -56,6 +62,11 @@ class EmployeeEditPage(BaseDriver):
         nationality_ele = self.wait_for_presence_of_element_located(self.nationality_field)
         return nationality_ele.text
 
+    def change_nationality(self):
+        current_nationality = self.get_selected_nationality()
+        new_list = [e for e in self.nationalities if e not in [current_nationality]]
+        return new_list[randrange(len(new_list))]
+
     def click_date_of_birth_field(self):
         element = self.wait_for_presence_of_element_located(self.date_of_birth_dropdown)
         element.click()
@@ -76,9 +87,11 @@ class EmployeeEditPage(BaseDriver):
         calendar_elements_ = self.get_dob_calendar_elements()
         date_elements = calendar_elements_.find_elements(*self.calendar_date_element)
         ut = Utils()
+        # remove leading 0 if exist due to calendar date below 10 is single digit
+        date_ = date_[1] if date_[0] == "0" else date_
         date_element = ut.find_element_by_text_from_list(date_, date_elements)
         date_element.click()
-        time.sleep(3)
+        time.sleep(2)
         dob_yyyy_mm_dd_field = self.wait_for_presence_of_element_located(self.dob_selected_yyyy_dd_mm)
         return dob_yyyy_mm_dd_field.get_attribute('value')
 
@@ -112,12 +125,19 @@ class EmployeeEditPage(BaseDriver):
             if ele.is_selected():
                 gender_label = ele.find_element(By.XPATH, '..')
                 return gender_label.text
+        return ""
 
-    def toggle_gender(self):
+    def get_not_selected_gender(self):
         gender_elements = self.wait_for_presence_of_elements_located(self.gender_elements)
         for ele in gender_elements:
             if not ele.is_selected():
-                self.driver.execute_script("arguments[0].click();", ele)
+                gender_label = ele.find_element(By.XPATH, '..')  # get parent element for label
+                return gender_label.text
+        return None
+
+    def toggle_gender(self):
+        gender = self.get_not_selected_gender()
+        self.select_gender(gender)
         return self.get_selected_gender()
 
     def assert_gender_option(self, gender_):
@@ -128,6 +148,8 @@ class EmployeeEditPage(BaseDriver):
         personal_details_save.click()
 
     def assert_edited_record(self, test_data_dict):
+        self.scroll_to_element(self.license_expiry_date_label)
+        time.sleep(3)
         updated_nationality = self.get_selected_nationality() == test_data_dict['Nationality']
         updated_gender = self.get_selected_gender() == test_data_dict['Gender']
         updated_dob = self.get_dob_field() == test_data_dict['Date of birth']
