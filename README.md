@@ -1,29 +1,29 @@
 # Introduction
-Web functional automation test using Selenium WebDriver with Python
+This project demonstrates the automated functional test of a HRMS website using Selenium WebDriver with Python.
 
 ## Testcases
 /testcases/test_login.py
 ### test_can_login_logout
-Test user can login successfully with valid credential  \
+- Test user can login successfully with valid credential
 Test user can logout successfully from avatar dropdown logout 
 
 ### test_no_input_login_validation 
-Test user unable to login successfully without username  \
-Test user unable to login successfully without password  \
-Test user unable to login successfully without username and password  \
-Validate that validation error message(s) prompted
+- Test user unable to login successfully without username
+- Test user unable to login successfully without password
+- Test user unable to login successfully without username and password
+- Validate that validation error message(s) prompted
 
 ### test_invalid_credential_login
-Test user unable to login successfully with invalid credential  \
-Validate error message
+- Test user unable to login successfully with invalid credential
+- Validate error message
 
 ### test_co_website_link
-Test company website hyperlink \
-Verify that browser open a tab that shows company website  
+- Test company website hyperlink
+- Verify that browser open a tab that shows company website  
 
 ### test_forget_password_link
-Test "forget password" link \
-Verify that page redirect to reset password request page 
+- Test "forget password" link
+- Verify that page redirect to reset password request page 
 
 /testcases/test_main_menu.py
 ### test_main_menu_search_clear
@@ -50,15 +50,16 @@ Test employee add page add employee function
 ### test_employee_record_edit
 
 ## script usage
+- CLI execution 
 pytest -v testcases/test_login.py \
 pytest -v -s -k test_invalid_credential_login \
 pytest -v testcases/test_main_menu.py \
-pytest -v -s -k test_search_employee_list_by_job_title
+pytest -v -s -k test_search_employee_list_by_job_title \
 pytest -v -s -k test_employee_add
 
 
 ## Demo video
-[https://www.youtube.com/watch?v=XtnMgxRbjAc]
+[![OrangeHRM](https://img.youtube.com/vi/XtnMgxRbjAc/0.jpg)](https://www.youtube.com/watch?v=XtnMgxRbjAc)
 
 ### reference
 https://docs.pytest.org/en/stable/contents.html \
