@@ -50,7 +50,7 @@ Test employee add page add employee function
 ### test_employee_record_edit
 
 ## script usage
-- CLI execution 
+- CLI execution \
 pytest -v testcases/test_login.py \
 pytest -v -s -k test_invalid_credential_login \
 pytest -v testcases/test_main_menu.py \
@@ -59,7 +59,7 @@ pytest -v -s -k test_employee_add
 
 
 ## Demo video
-[![OrangeHRM](https://img.youtube.com/vi/XtnMgxRbjAc/0.jpg)](https://www.youtube.com/watch?v=XtnMgxRbjAc)
+[![OrangeHRM](https://img.youtube.com/vi/sWl8E4bha0E/0.jpg)](https://www.youtube.com/watch?v=sWl8E4bha0E)
 
 ### reference
 https://docs.pytest.org/en/stable/contents.html \
