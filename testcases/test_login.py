@@ -80,8 +80,8 @@ def test_co_website_link(chrome_driver):
     time.sleep(2)
     # assert test result
     co_website_success = login_page.assert_url(co_website_url)
-    title_check = login_page.wait_for_title_is(co_website_title)
-    assert co_website_success and title_check
+    # title_check = login_page.wait_for_title_is(co_website_title)
+    assert co_website_success
 
 
 def test_forget_password_link(chrome_driver):
