@@ -1,8 +1,9 @@
 # Introduction
-This project demonstrates the automated functional test of a HRMS website using Selenium WebDriver with Python.
+This project demonstrates the automated functional test of a HRMS website using Selenium WebDriver with Python. 
+Page Object Model (POM) is used in this test automation to enhance the maintainability, reusability, and readability.
 
 ## Testcases
-/testcases/test_login.py
+testcases/test_login.py
 ### test_can_login_logout
 - Test user can login successfully with valid credential
 Test user can logout successfully from avatar dropdown logout 
